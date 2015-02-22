@@ -161,13 +161,16 @@
 
     }
 
+    var lastPos;// = joint.pos;
+
     function drawJoints(deltaTime) {
 
         var geometry = new THREE.Geometry();
         var j = joint;
         var pos = j.pos;
+
         if (j) {
-            geometry.vertices.push(pos);
+            geometry.vertices.push(lastPos);
             var col = new THREE.Color();
             col.setHSL(j.phi/100%1.0, 0.8,0.5)
             var material = new THREE.LineBasicMaterial({
@@ -180,10 +183,22 @@
             var y = pos.y + r * Math.sin(j.theta) * Math.sin(j.phi);
             var z = pos.z + r * Math.cos(j.theta);
             pos = new THREE.Vector3(x, y, z);
-            geometry.vertices.push(pos);
+            //geometry.vertices.push(pos);
+            if (j.joint) {
+                if (!j.joint.joint) {
+                    geometry.vertices.push(pos);
+                }
+            }
             j.theta += j.deltaTheta;
             j.phi   += j.deltaPhi;
             j = j.joint;
+            if (!j) {
+                var bail = false;
+                if (!lastPos) bail = true;
+                lastPos = pos;
+                if(bail) return;
+                geometry.vertices.push(pos);
+            }
         }
         var line = new THREE.Line(geometry, material);
 
@@ -232,7 +247,7 @@ conole
         camera.position.y = -200;// THREE.Math.clamp( camera.position.y + ( - ( mouseY - 200 ) - camera.position.y ) * .05, 50, 1000 );
         camera.position.z = 200;
 
-        theta += 2.5;
+        theta += 1.5;
         beta += 0.5;
         gamma -= 0.8;
 
