@@ -53,23 +53,38 @@
     var lines = [];
     var MAX_NUM_LINES =300;
 
-    var joint = {
+    window.joint = {
         pos: new THREE.Vector3(),
         phi: 0.0, theta: 0.0,
-        deltaPhi: Math.random()*0.1, deltaTheta: Math.random()*0.1,
-        length: Math.random()*10.0 + 2,
+        deltaPhi: Math.random()*.051, deltaTheta: Math.random()*.051,
+        length: Math.random()*20.0 + 20,
         joint: {
             phi: 0.0, theta: 0.0,
-            deltaPhi: Math.random()*0.1, deltaTheta: Math.random()*0.1,
-            length: Math.random()*10.0 + 2,
+            deltaPhi: Math.random()*.051, deltaTheta: Math.random()*.051,
+            length: Math.random()*20.0 + 2,
             joint: {
                 phi: 0.0, theta: 0.0,
-                deltaPhi: Math.random()*0.1, deltaTheta: Math.random()*0.1,
-                length: Math.random()*10.0 + 2,
+                deltaPhi: Math.random()*0.2-0.1, deltaTheta: Math.random()*0.2-0.1,
+                length: Math.random()*20.0 + 2,
                 joint: {
                     phi: 0.0, theta: 0.0,
-                    deltaPhi: Math.random()*0.1, deltaTheta: Math.random()*0.1,
-                    length: Math.random()*10.0 + 2
+                    deltaPhi: Math.random()*0.2-0.1, deltaTheta: Math.random()*0.2-0.1,
+                    length: Math.random()*20.0 + 2,
+                    joint: {
+                        phi: 0.0, theta: 0.0,
+                        deltaPhi: Math.random()*0.2-0.1, deltaTheta: Math.random()*0.2-0.1,
+                        length: Math.random()*20.0 + 2,
+                        joint: {
+                            phi: 0.0, theta: 0.0,
+                            deltaPhi: Math.random()*0.2-0.1, deltaTheta: Math.random()*0.2-0.1,
+                            length: Math.random()*20.0 + 2,
+                            joint: {
+                                phi: 0.0, theta: 0.0,
+                                deltaPhi: Math.random()*0.2-0.1, deltaTheta: Math.random()*0.2-0.1,
+                                length: Math.random()*20.0 + 2
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -166,7 +181,7 @@
     function drawJoints(deltaTime) {
 
         var geometry = new THREE.Geometry();
-        var j = joint;
+        var j = window.joint;
         var pos = j.pos;
 
         if (j) {
@@ -183,7 +198,7 @@
             var y = pos.y + r * Math.sin(j.theta) * Math.sin(j.phi);
             var z = pos.z + r * Math.cos(j.theta);
             pos = new THREE.Vector3(x, y, z);
-            //geometry.vertices.push(pos);
+            if (j != joint) geometry.vertices.push(pos);
             if (j.joint) {
                 if (!j.joint.joint) {
                     geometry.vertices.push(pos);
@@ -236,7 +251,7 @@ conole
     var oldLookAt = new THREE.Vector3(0,0,0);
     var lookAtDist = new THREE.Vector3(0,0,0);
     var theta = 45;
-    var radius = 80;
+    var radius = 120;
     var radius2 = 100;
     var beta = 33;
     var gamma = 33;
