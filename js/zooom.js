@@ -51,9 +51,19 @@
     var verts;
 
     var lines = [];
-    var MAX_NUM_LINES =300;
+    var MAX_NUM_LINES =150;
 
-    window.joint = {
+    function Joi() {
+        this.pos = new THREE.Vector3();
+        this.phi = 0.0;
+        this.theta = 0.0;
+        this.deltaPhi = Math.random()*0.2-0.1;
+        this.deltaTheta = Math.random()*0.2-0.1;
+        this.length = Math.random()*20.0 + 5;
+        this.joint;
+    }
+
+    var joint = {
         pos: new THREE.Vector3(),
         phi: 0.0, theta: 0.0,
         deltaPhi: Math.random()*.051, deltaTheta: Math.random()*.051,
@@ -81,7 +91,37 @@
                             joint: {
                                 phi: 0.0, theta: 0.0,
                                 deltaPhi: Math.random()*0.2-0.1, deltaTheta: Math.random()*0.2-0.1,
-                                length: Math.random()*20.0 + 2
+                                length: Math.random()*20.0 + 2,
+                                joint: {
+                                    phi: 0.0, theta: 0.0,
+                                    deltaPhi: Math.random()*0.2-0.1, deltaTheta: Math.random()*0.2-0.1,
+                                    length: Math.random()*20.0 + 2,
+                                    joint: {
+                                        phi: 0.0, theta: 0.0,
+                                        deltaPhi: Math.random()*0.2-0.1, deltaTheta: Math.random()*0.2-0.1,
+                                        length: Math.random()*20.0 + 2,
+                                        joint: {
+                                            phi: 0.0, theta: 0.0,
+                                            deltaPhi: Math.random()*0.2-0.1, deltaTheta: Math.random()*0.2-0.1,
+                                            length: Math.random()*20.0 + 2,
+                                            joint: {
+                                                phi: 0.0, theta: 0.0,
+                                                deltaPhi: Math.random()*0.2-0.1, deltaTheta: Math.random()*0.2-0.1,
+                                                length: Math.random()*20.0 + 2,
+                                                joint: {
+                                                    phi: 0.0, theta: 0.0,
+                                                    deltaPhi: Math.random()*0.2-0.1, deltaTheta: Math.random()*0.2-0.1,
+                                                    length: Math.random()*20.0 + 2,
+                                                    joint: {
+                                                        phi: 0.0, theta: 0.0,
+                                                        deltaPhi: Math.random()*0.2-0.1, deltaTheta: Math.random()*0.2-0.1,
+                                                        length: Math.random()*20.0 + 2
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -90,7 +130,7 @@
         }
     };
 
-
+    var DEPTH = 12;
 
     var colors = [];
     var light, light2;
@@ -122,8 +162,13 @@
         scene = new THREE.Scene();
 
 
+        joint = new Joi();
+        var j = joint;
 
-
+        for (var b = DEPTH; b--;) {
+            j.joint = new Joi();
+            j = j.joint;
+        }
 
         //scene.add(sphereObj);
 
@@ -139,10 +184,9 @@
         scene.add(ambientLight);
         //scene.add()
 
-
         // RENDERER
         renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
-        renderer.setClearColor( 0x000000, 1 );
+        renderer.setClearColor( 0x0, 1 );
         renderer.autoClear = false;
 
         renderer.domElement.style.position = "relative";
@@ -181,7 +225,7 @@
     function drawJoints(deltaTime) {
 
         var geometry = new THREE.Geometry();
-        var j = window.joint;
+        var j = joint;
         var pos = j.pos;
 
         if (j) {
@@ -204,8 +248,8 @@
                     geometry.vertices.push(pos);
                 }
             }
-            j.theta += j.deltaTheta;
-            j.phi   += j.deltaPhi;
+            j.theta += j.deltaTheta/2.0;
+            j.phi   += j.deltaPhi/2.0;
             j = j.joint;
             if (!j) {
                 var bail = false;
@@ -251,7 +295,7 @@ conole
     var oldLookAt = new THREE.Vector3(0,0,0);
     var lookAtDist = new THREE.Vector3(0,0,0);
     var theta = 45;
-    var radius = 120;
+    var radius = 100;
     var radius2 = 100;
     var beta = 33;
     var gamma = 33;
